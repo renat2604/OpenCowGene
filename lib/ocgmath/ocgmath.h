@@ -6,59 +6,48 @@
 #ifndef OCG_MATH_H
 #define OCG_MATH_H
 
-typedef struct Vector2 Vector2;
+#include <unistd.h>
+#include <stdbool.h>
 
+#define NDARRAY_MAX_DIMS 8
+
+typedef struct Vector2 Vector2;
 struct Vector2 {
     float x;
     float y;
 };
 
-// Vector with components value 0.0f
 Vector2 Vector2Zero(void);
-
-// Vector with components value 1.0f
 Vector2 Vector2One(void);
-
-// Add two vectors (v1 + v2)
 Vector2 Vector2Add(Vector2, Vector2);
-
-// Add vector and float value
 Vector2 Vector2AddVal(Vector2, float);
-
-// Subtract two vectors (v1 - v2)
 Vector2 Vector2Sub(Vector2, Vector2);
-
-// Subract vector by float value
 Vector2 Vector2SubVal(Vector2, float); 
-
-// Calculate vector length
 float Vector2Len(Vector2);
-
-// Calculate vector square length
 float Vector2LenSqr(Vector2);
-
-// Calculate two vectors dot product
 float Vector2DotProduct(Vector2, Vector2);
-
-// Calculate distance between two vectors
 float Vector2Distance(Vector2, Vector2);
-
-// Calculate square distance between two vectors
 float Vector2DistanceSqr(Vector2, Vector2);
-
-// Calclulate angle between two vectors
-// float Vector2Angle(Vector2, Vector2);
-
-// Scale vector by value
 Vector2 Vector2Scale(Vector2, float);
-
-// Negate vector
 Vector2 Vector2Negate(Vector2);
-
-// Divide vector by vector
 Vector2 Vector2Divide(Vector2, Vector2);
-
-// Normailize vector
 Vector2 Vector2Normailize(Vector2);
+
+
+typedef struct {
+    float *data;
+    size_t ndim;
+    size_t shape[NDARRAY_MAX_DIMS];
+    size_t strides[NDARRAY_MAX_DIMS];
+    size_t size;
+    bool owns_data;
+} FloatNDArray;
+
+int FloatNDArrayInit(FloatNDArray *arr, size_t ndim, const size_t *shape);
+void FloatNDArrayFree(FloatNDArray *arr);
+int FloatNDArrayAdd(FloatNDArray*, const FloatNDArray*, const FloatNDArray*);
+void FloatNDArrayFill(FloatNDArray *arr, float val);
+int FloatNDArraySet(FloatNDArray *arr, const size_t *indices, float val);
+int FloatNDArrayGet(const FloatNDArray *arr, const size_t *indices, float *out);
 
 #endif
