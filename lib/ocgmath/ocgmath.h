@@ -1,3 +1,8 @@
+/* OpenCowGene Math library (ocgmath.h)
+ * License: BSD-3-Clause
+ * Author: Nikita (nst) Stavtsev
+ */
+
 #ifndef OCG_MATH_H
 #define OCG_MATH_H
 

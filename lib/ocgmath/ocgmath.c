@@ -1,3 +1,9 @@
+/* OpenCowGene Math library (ocgmath.c)
+ * Description: Math library for OpenCowGene needs
+ * License: BSD-3-Clause
+ * Author: Nikita (nst) Stavtsev
+ */
+
 #include "ocgmath.h"
 
 #include <math.h>
