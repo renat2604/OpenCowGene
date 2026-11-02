@@ -20,22 +20,24 @@ int FloatNDAInit(FloatNDA *arr, size_t ndim, const size_t *shape) {
 	size_t stride = 1;
 
 	for (size_t i = ndim; i > 0; i--) {
-		if (shape[i] == 0)
+		size_t axis = i - 1;
+		size_t dim = shape[axis];
+
+		if (dim == 0)
 			return -1;
-		if (stride > SIZE_MAX / shape[i])
+		if (stride > SIZE_MAX / dim)
 			return -1;
-		tmp.shape[i] = shape[i];
-		tmp.strides[i] = stride;
-		stride *= shape[i];
+
+		tmp.shape[axis] = dim;
+		tmp.strides[axis] = stride;
+		stride *= dim;
 	}
 
 	tmp.size = stride;
-
 	if (tmp.size > SIZE_MAX / sizeof(float))
 		return -1;
 
 	tmp.data = calloc(tmp.size, sizeof(float));
-
 	if (!tmp.data)
 		return -1;
 

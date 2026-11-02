@@ -8,11 +8,17 @@
 #include <stdlib.h>
 
 /* World2D related functions */
-void World2DInit(World2D *world) {
-	if (!world)
-		return;
+int World2DInit(World2D *world) {
+	if (!world) 
+		return -1;
+	if (!world->UserInitCallback || !world->UserStepCallback || !world->SContext)
+		return -1;
+	
+	world->cfnd = 0;
 
-	*world = (World2D){0};
+	if (world->UserInitCallback(world, world->SContext) != 0)
+		return -1;
+	return 0;
 }
 
 void World2DFree(World2D *world) {
@@ -24,6 +30,15 @@ void World2DFree(World2D *world) {
 	}
 
 	*world = (World2D){0};
+}
+
+int World2DStep(World2D *world) {
+	if (!world || !world->UserStepCallback)
+		return -1;
+
+	if (world->UserStepCallback(world, world->SContext) != 0)
+		return -1;
+	return 0;
 }
 
 int World2DAddFND(World2D *world, size_t ndim, const size_t *shape, size_t *outid) {
