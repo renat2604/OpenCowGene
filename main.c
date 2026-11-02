@@ -1,4 +1,4 @@
-#include "ocgv2.h"
+#include "ocg2d.h"
 
 #include <stdint.h>
 #include <math.h>
@@ -34,14 +34,14 @@ void SimulationInit(World2D *world) {
 	
 	// Resource map init
 	World2DAddFND(world, 3, (const size_t[]){WORLD_DIM, WORLD_DIM, 1}, &RESOURCE_MAP_ID);
-	FloatNDArrayFill(
+	FloatNDAFill(
 		World2DGetFND(world, RESOURCE_MAP_ID), 
 		1.0f
 	);
 	
 	// Climat map init
 	World2DAddFND(world, 3, (const size_t[]){WORLD_DIM, WORLD_DIM, 1}, &CLIMAT_MAP_ID);
-	FloatNDArray *climat = World2DGetFND(world, CLIMAT_MAP_ID);
+	FloatNDA *climat = World2DGetFND(world, CLIMAT_MAP_ID);
 	/// Inverted double pole gradient
 	for (size_t i = 0; i < climat->size; i++) {
 		size_t y = i / climat->shape[1];
@@ -56,28 +56,28 @@ void SimulationInit(World2D *world) {
 			(const size_t[]){WORLD_DIM, WORLD_DIM, 1}, 
 			&SEASON_MAP_ID[i]
 		);
-		FloatNDArray *currMap = World2DGetFND(world, SEASON_MAP_ID[i]);
+		FloatNDA *currMap = World2DGetFND(world, SEASON_MAP_ID[i]);
 		switch (i) {
 		case 0:
-			FloatNDArrayFill(
+			FloatNDAFill(
 				currMap,
 				0.0f
 			);
 			break;
 		case 1:
-			FloatNDArrayFill(
+			FloatNDAFill(
 				currMap,
 				0.5f
 			);
 			break;
 		case 2:
-			FloatNDArrayFill(
+			FloatNDAFill(
 				currMap,
 				1.0f
 			);
 			break;
 		case 3:
-			FloatNDArrayFill(
+			FloatNDAFill(
 				currMap,
 				0.2f
 			);
@@ -90,19 +90,19 @@ void SimulationInit(World2D *world) {
 }
 
 void SimulationTick(World2D *world) {
-	FloatNDArray *resMap = World2DGetFND(world, RESOURCE_MAP_ID);
-	FloatNDArray *climatMap = World2DGetFND(world, CLIMAT_MAP_ID);
-	FloatNDArray *seasonMaps[4];
+	FloatNDA *resMap = World2DGetFND(world, RESOURCE_MAP_ID);
+	FloatNDA *climatMap = World2DGetFND(world, CLIMAT_MAP_ID);
+	FloatNDA *seasonMaps[4];
 	for (size_t i = 0; i < 4; i++) {
 		seasonMaps[i] = World2DGetFND(world, SEASON_MAP_ID[i]);
 	}
 
 	// Resource grow
-	FloatNDArray growStep;
-	FloatNDArrayFill(&growStep, 0.0f);
-	FloatNDArrayAdd(&growStep, seasonMaps[CURRENT_SEASON], &growStep);
+	FloatNDA growStep;
+	FloatNDAFill(&growStep, 0.0f);
+	FloatNDAAdd(&growStep, seasonMaps[CURRENT_SEASON], &growStep);
 	for (size_t i = 0; i < growStep.size; i++) {
 		growStep.data[i] *= climatMap->data[i];
 	}
-	FloatNDArrayAdd(resMap, &growStep, resMap);
+	FloatNDAAdd(resMap, &growStep, resMap);
 }

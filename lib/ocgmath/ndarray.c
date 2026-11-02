@@ -8,12 +8,12 @@
 #include <stdint.h>
 #include <stddef.h>
 
-/* FloatNDArray Implementations */
-int FloatNDArrayInit(FloatNDArray *arr, size_t ndim, const size_t *shape) {
+/* FloatNDA Implementations */
+int FloatNDAInit(FloatNDA *arr, size_t ndim, const size_t *shape) {
 	if (!arr || !shape || ndim == 0 || ndim > NDARRAY_MAX_DIMS)
 		return -1;
 	
-	FloatNDArray tmp = { 0 };
+	FloatNDA tmp = { 0 };
 	tmp.ndim = ndim;
 	tmp.owns_data = true;
 
@@ -43,16 +43,16 @@ int FloatNDArrayInit(FloatNDArray *arr, size_t ndim, const size_t *shape) {
 	return 0;
 }
 
-void FloatNDArrayFree(FloatNDArray *arr) {
+void FloatNDAFree(FloatNDA *arr) {
 	if (!arr)
 		return;
 	if (arr->owns_data)
 		free(arr->data);
 
-	*arr = (FloatNDArray){0};
+	*arr = (FloatNDA){0};
 }
 
-int FloatNDArrayAdd(FloatNDArray *res, const FloatNDArray *a, const FloatNDArray *b) {
+int FloatNDAAdd(FloatNDA *res, const FloatNDA *a, const FloatNDA *b) {
     if (a->size != b->size || a->size != res->size)
         return -1;
 
@@ -62,13 +62,13 @@ int FloatNDArrayAdd(FloatNDArray *res, const FloatNDArray *a, const FloatNDArray
     return 0;
 }
 
-void FloatNDArrayFill(FloatNDArray *arr, float val) {
+void FloatNDAFill(FloatNDA *arr, float val) {
 	for (size_t i = 0; i < arr->size; ++i) {
 		arr->data[i] = val;
 	}
 }
 
-int FloatNDArraySet(FloatNDArray *arr, const size_t *indices, float val) {
+int FloatNDASet(FloatNDA *arr, const size_t *indices, float val) {
 	if (!arr || !arr->data || !indices)
 		return -1;
 
@@ -84,7 +84,7 @@ int FloatNDArraySet(FloatNDArray *arr, const size_t *indices, float val) {
 	return 0;
 }
 
-int FloatNDArrayGet(const FloatNDArray *arr, const size_t *indices, float *out) {
+int FloatNDAGet(const FloatNDA *arr, const size_t *indices, float *out) {
 	if (!arr || !arr->data || !indices || !out)
 		return -1;
 	

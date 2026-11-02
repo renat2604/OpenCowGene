@@ -20,7 +20,7 @@ void World2DFree(World2D *world) {
 		return;
 
 	for (size_t i = 0; i < world->cfnd; i++) {
-		FloatNDArrayFree(&world->fnd[i]);
+		FloatNDAFree(&world->fnd[i]);
 	}
 
 	*world = (World2D){0};
@@ -32,7 +32,7 @@ int World2DAddFND(World2D *world, size_t ndim, const size_t *shape, size_t *outi
 
 	size_t id = world->cfnd;
 
-	if (FloatNDArrayInit(&world->fnd[id], ndim, shape) != 0)
+	if (FloatNDAInit(&world->fnd[id], ndim, shape) != 0)
 		return -1;
 
 	world->cfnd++;
@@ -41,7 +41,7 @@ int World2DAddFND(World2D *world, size_t ndim, const size_t *shape, size_t *outi
 	return 0;
 }
 
-FloatNDArray* World2DGetFND(World2D *world, size_t id) {
+FloatNDA* World2DGetFND(World2D *world, size_t id) {
 	if (!world || id >= world->cfnd) {
 		return NULL;
 	}

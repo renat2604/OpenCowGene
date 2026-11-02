@@ -18,14 +18,14 @@
 // World declaration
 DEFINE_STRUCT_TYPE(World2D);
 struct World2D {
-	FloatNDArray fnd[WORLD_MAX_FNDS];
+	FloatNDA fnd[WORLD_MAX_FNDS];
 	size_t cfnd;
 };
 
 void World2DInit(World2D *world);
 void World2DFree(World2D *world);
 int World2DAddFND(World2D *world, size_t ndim, const size_t *shape, size_t *outid);
-FloatNDArray* World2DGetFND(World2D *world, size_t id);
+FloatNDA* World2DGetFND(World2D *world, size_t id);
 
 
 #endif
